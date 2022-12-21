@@ -17,6 +17,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     Color nonactiveColor = const Color(0xFFADADAD);
     TextEditingController usernameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+    TextEditingController tcController = TextEditingController();
     TextEditingController nameController = TextEditingController();
     String username = "";
     String password = "";
@@ -106,6 +107,76 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                 ),
               ),
+            ),
+            Text(
+              "T.C ID Number",
+              style: TextStyle(fontFamily: "Poppins", fontSize: 30, color: activeColor),
+              textAlign: TextAlign.center,
+            ),
+            Container(
+              margin: const EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width - 20,
+              height: 40,
+              child: TextField(
+                controller: tcController,
+                onChanged: (value){
+                  password = value;
+                },
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "Type your id number",
+                  hintStyle:
+                  TextStyle(fontFamily: "Poppins", fontSize: 25, color: nonactiveColor),
+                  prefix: Icon(
+                    Icons.lock,
+                    color: nonactiveColor,
+                  ),
+                ),
+              ),
+            ),
+            Text(
+              "Birth Date",
+              style: TextStyle(fontFamily: "Poppins", fontSize: 30, color: activeColor),
+              textAlign: TextAlign.center,
+            ),
+            Container(
+              margin: const EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width - 20,
+              height: 40,
+              child: DatePickerDialog(initialDate: DateTime.now(), firstDate: DateTime(1990), lastDate: DateTime.now())
+            ),
+            Text(
+              "Current Statue",
+              style: TextStyle(fontFamily: "Poppins", fontSize: 30, color: activeColor),
+              textAlign: TextAlign.center,
+            ),
+            Container(
+              margin: const EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width - 20,
+              height: 40,
+              child: Radio(value: false, groupValue: false, onChanged: (single){single = true;})
+            ),
+            Text(
+              "Interests",
+              style: TextStyle(fontFamily: "Poppins", fontSize: 30, color: activeColor),
+              textAlign: TextAlign.center,
+            ),
+            Container(
+                margin: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width - 20,
+                height: 40,
+                child: Checkbox(value: false, onChanged: (interest){})
+            ),
+            Text(
+              "License",
+              style: TextStyle(fontFamily: "Poppins", fontSize: 30, color: activeColor),
+              textAlign: TextAlign.center,
+            ),
+            Container(
+                margin: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width - 20,
+                height: 40,
+                child: Switch(value: false, onChanged: (license){license = true;})
             ),
             GestureDetector(
               onTap: () async{
