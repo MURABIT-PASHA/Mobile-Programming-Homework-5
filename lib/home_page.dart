@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:homework_5/add_event.dart';
+import 'package:homework_5/events_database_manager.dart';
 import 'package:homework_5/login_page.dart';
 import 'package:homework_5/user_database_manager.dart';
 import 'package:homework_5/profile_page.dart';
@@ -9,7 +11,8 @@ class HomePage extends StatefulWidget {
   final String userID;
   final String userPassword;
 
-  const HomePage({super.key,
+  const HomePage({
+    super.key,
     required this.userDatabaseManager,
     required this.userID,
     required this.userPassword,
@@ -58,15 +61,36 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: const Text('Log Out'),
               onTap: () {
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder)=>LoginPage(userDatabaseManager: widget.userDatabaseManager)), (route) => false);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => LoginPage(
+                            userDatabaseManager: widget.userDatabaseManager)),
+                    (route) => false);
               },
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          addEvent();
+        },
+        child: Icon(Icons.add),
+      ),
       body: const Center(
         child: Text('Home Page'),
       ),
     );
+  }
+
+  Future<void> addEvent() async {
+    final eventDb = EventDatabaseManager();
+    await eventDb.init();
+    showDialog(
+        context: context,
+        builder: (builder) => Dialog(
+              child: AddEventPage(eventDatabaseManager: eventDb),
+            ));
   }
 }

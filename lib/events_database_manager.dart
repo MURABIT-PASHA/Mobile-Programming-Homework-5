@@ -2,7 +2,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:homework_5/event.dart';
 class EventDatabaseManager {
   static const String tableName = 'events';
-  static const String columnId = 'id';
   static const String columnEventDate = 'eventDate';
   static const String columnEventId = 'eventId';
   static const String columnEventName = 'eventName';
@@ -17,7 +16,7 @@ class EventDatabaseManager {
       onCreate: (db, version) {
         return db.execute(
           // Create a table to store events
-          'CREATE TABLE $tableName($columnId INTEGER PRIMARY KEY, $columnEventDate TEXT, $columnEventId INTEGER, $columnEventName TEXT)',
+          'CREATE TABLE $tableName( $columnEventId INTEGER PRIMARY KEY, $columnEventDate TEXT, $columnEventName TEXT)',
         );
       },
       // Set the version of the database. This allows you to make changes to the
@@ -47,7 +46,7 @@ class EventDatabaseManager {
     await _database.delete(
       tableName,
       // Use the `where` clause to delete the event with the given ID
-      where: '$columnId = ?',
+      where: '$columnEventId = ?',
       // Pass the ID as a list of arguments
       whereArgs: [id],
     );
@@ -59,7 +58,7 @@ class EventDatabaseManager {
       tableName,
       event.toMap(),
       // Use the `where` clause to update the event with the given ID
-      where: '$columnId = ?',
+      where: '$columnEventId = ?',
       // Pass the ID as a list of arguments
       whereArgs: [event.eventId],
     );
