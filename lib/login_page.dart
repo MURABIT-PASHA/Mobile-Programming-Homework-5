@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:homework_5/home_page.dart';
 import 'package:homework_5/user_database_manager.dart';
 
 class LoginPage extends StatefulWidget {
   final UserDatabaseManager userDatabaseManager;
-
   const LoginPage({super.key, required this.userDatabaseManager});
 
   @override
@@ -54,21 +54,28 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                  final user = await widget.userDatabaseManager.getUser(
-                    turkishId: _turkishIdController.text,
-                    password: _passwordController.text,
+                final user = await widget.userDatabaseManager.getUser(
+                  turkishId: _turkishIdController.text,
+                  password: _passwordController.text,
+                );
+                if (user == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Invalid Turkish ID number or password'),
+                    ),
                   );
-                  if (user == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content:
-                            Text('Invalid Turkish ID number or password'),
-                      ),
-                    );
-                  } else {
-                    Navigator.pushNamed(context, '/home');
-                  }
-
+                } else {
+                  setState(() {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (builder) => HomePage(
+                              userDatabaseManager: widget.userDatabaseManager,
+                              userID: _turkishIdController.text,
+                              userPassword: _passwordController.text,
+                            )));
+                  });
+                }
               },
               child: const Text('Login'),
             ),

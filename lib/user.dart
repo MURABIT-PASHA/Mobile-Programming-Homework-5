@@ -32,14 +32,14 @@ class User {
   }
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      turkishId: map['turkish_id'],
+      turkishId: map['turkishId'],
       name: map['name'],
       surname: map['surname'],
       password: map['password'],
-      dateOfBirth: map['date_of_birth'],
-      maritalStatus: map['marital_status'],
+      dateOfBirth: map['dateOfBirth'],
+      maritalStatus: map['maritalStatus'],
       interests: List<String>.from(map['interests'].split(',')),
-      hasDriverLicense: map['driver_license'] == 1,
+      hasDriverLicense: map['hasDriverLicense'] == 1,
     );
   }
 }

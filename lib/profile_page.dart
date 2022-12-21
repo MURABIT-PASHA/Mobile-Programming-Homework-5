@@ -4,9 +4,11 @@ import 'package:homework_5/user_database_manager.dart';
 import 'package:homework_5/registration_page.dart';
 
 class ProfilePage extends StatefulWidget {
+  final String userID;
+  final String userPassword;
   final UserDatabaseManager userDatabaseManager;
 
-  const ProfilePage({required this.userDatabaseManager});
+  const ProfilePage({required this.userID, required this.userPassword, required this.userDatabaseManager});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -23,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _loadUser() async {
     final user = await widget.userDatabaseManager
-        .getUser(turkishId: '11819689676', password: '12345');
+        .getUser(turkishId: widget.userID, password: widget.userPassword);
     setState(() {
       _user = user!;
     });
@@ -36,36 +38,39 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text('Profile'),
       ),
       body: _user == null
-          ? Center(
-              child: const CircularProgressIndicator(),
+          ? const Center(
+              child: CircularProgressIndicator(),
             )
-          : Column(
-              children: [
-                Text('Turkish ID: ${_user.turkishId}'),
-                Text('Name: ${_user.name}'),
-                Text('Surname: ${_user.surname}'),
-                Text('Password: ${_user.password}'),
-                Text('Date of Birth: ${_user.dateOfBirth}'),
-                Text('Marital Status: ${_user.maritalStatus}'),
-                Text('Interests: ${_user.interests.join(', ')}'),
-                Text(
-                    'Driver\'s License: ${_user.hasDriverLicense ? 'Yes' : 'No'}'),
-                ElevatedButton(
-                  child: const Text('Change'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegistrationPage(
-                          userDatabaseManager: widget.userDatabaseManager,
-                          user: _user.toMap(),
+          : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('Turkish ID: ${_user.turkishId}'),
+                  Text('Name: ${_user.name}'),
+                  Text('Surname: ${_user.surname}'),
+                  Text('Password: ${_user.password}'),
+                  Text('Date of Birth: ${_user.dateOfBirth}'),
+                  Text('Marital Status: ${_user.maritalStatus}'),
+                  Text('Interests: ${_user.interests.join(', ')}'),
+                  Text(
+                      'Driver\'s License: ${_user.hasDriverLicense ? 'Yes' : 'No'}'),
+                  ElevatedButton(
+                    child: const Text('Change'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegistrationPage(
+                            userDatabaseManager: widget.userDatabaseManager,
+                            user: _user.toMap(),
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+          ),
     );
   }
 }

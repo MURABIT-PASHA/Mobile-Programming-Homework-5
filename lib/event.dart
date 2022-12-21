@@ -1,36 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 class Event {
-  final int id;
-  final String name;
-  final DateTime date;
-  final TimeOfDay time;
+  final DateTime eventDate;
+  final int eventId;
+  final String eventName;
 
-  Event({
-    required this.id,
-    required this.name,
-    required this.date,
-    required this.time,
-  });
+  Event(this.eventDate, this.eventId, this.eventName);
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'name': name,
-      'date': DateFormat('yyyy-MM-dd').format(date),
-      'time': time.toString(),
+      'eventDate': eventDate.toIso8601String(),
+      'eventId': eventId,
+      'eventName': eventName,
     };
   }
 
   static Event fromMap(Map<String, dynamic> map) {
     return Event(
-      id: map['id'],
-      name: map['name'],
-      date: DateFormat('yyyy-MM-dd').parse(map['date']),
-      time: TimeOfDay.fromDateTime(
-        DateTime.parse(map['time']),
-      ),
+      DateTime.parse(map['eventDate']),
+      map['eventId'],
+      map['eventName'],
     );
   }
 }

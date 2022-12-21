@@ -60,62 +60,65 @@ class _RegistrationPageState extends State<RegistrationPage> {
               width: MediaQuery.of(context).size.width - 30,
               height: 50,
               margin: const EdgeInsets.only(top: 10, bottom: 10),
-              child: TextFormField(
+              child: TextField(
                 decoration: const InputDecoration(labelText: 'Turkish ID Number'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your T.C. Number';
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    _turkishId = value;
                   }
-                  return null;
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Please enter your ID")));
+                  }
                 },
-                onSaved: (value) => _turkishId = value!,
               ),
             ),
             Container(
               width: MediaQuery.of(context).size.width - 30,
               height: 50,
               margin: const EdgeInsets.only(top: 10, bottom: 10),
-              child: TextFormField(
-                initialValue: _turkishId,
+              child: TextField(
                 decoration:
                     const InputDecoration(labelText: 'Name'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your name';
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    _name = value;
                   }
-                  return null;
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Please enter your name")));
+                  }
                 },
-                onSaved: (value) => _name = value!,
               ),
             ),
             Container(
               width: MediaQuery.of(context).size.width - 30,
               height: 50,
               margin: const EdgeInsets.only(top: 10, bottom: 10),
-              child: TextFormField(
+              child: TextField(
                 decoration: const InputDecoration(labelText: 'Surname'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your surname';
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    _surname = value;
                   }
-                  return null;
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Please enter your surname")));
+                  }
                 },
-                onSaved: (value) => _surname = value!,
               ),
             ),
             Container(
               width: MediaQuery.of(context).size.width - 30,
               height: 50,
               margin: const EdgeInsets.only(top: 10, bottom: 10),
-              child: TextFormField(
+              child: TextField(
                 decoration: const InputDecoration(labelText: 'Password'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a password';
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    _password = value;
                   }
-                  return null;
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Please enter your password")));
+                  }
                 },
-                onSaved: (value) => _password = value!,
                 obscureText: true,
               ),
             ),
@@ -257,7 +260,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
   bool control(){
-    if (_name == "" || _turkishId == "" || _surname == "" || _password == "") {
+    if (_name == "" || _turkishId == "" || _surname == "" || _password == "" || _maritalStatus == "") {
       return false;
     }
       else{

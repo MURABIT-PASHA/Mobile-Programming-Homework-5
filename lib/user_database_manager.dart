@@ -6,7 +6,6 @@ class UserDatabaseManager {
   static final UserDatabaseManager _instance = UserDatabaseManager._internal();
   factory UserDatabaseManager() => _instance;
   UserDatabaseManager._internal();
-
   static var _database;
 
   Future<void> init() async {
