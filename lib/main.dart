@@ -1,49 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:homework_5/user_database_manager.dart';
 import 'package:homework_5/login_page.dart';
 import 'package:homework_5/registration_page.dart';
+import 'package:homework_5/home_page.dart';
+import 'package:homework_5/events_database_manager.dart';
+import 'package:homework_5/events_page.dart';
+import 'package:homework_5/profile_page.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final userDatabaseManager = UserDatabaseManager();
+  await userDatabaseManager.database;
+  final eventsDatabaseManager = EventsDatabaseManager();
+  await eventsDatabaseManager.database;
+  runApp(MyApp(
+    userDatabaseManager: userDatabaseManager,
+    eventsDatabaseManager: eventsDatabaseManager,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final UserDatabaseManager userDatabaseManager;
+  final EventsDatabaseManager eventsDatabaseManager;
+
+  const MyApp({
+    required this.userDatabaseManager,
+    required this.eventsDatabaseManager,
+  });
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const MyHomePage(title: 'Homework 5'),
-      initialRoute: LoginPage.id,
+      initialRoute: '/',
       routes: {
-        LoginPage.id : (context) => const LoginPage(),
-        RegistrationPage.id : (context) => const RegistrationPage(),
+        '/': (context) => LoginPage(userDatabaseManager: userDatabaseManager,),
+        '/registration': (context) => RegistrationPage(userDatabaseManager: userDatabaseManager, user: const {},),
+        '/home': (context) => HomePage(
+          userDatabaseManager: userDatabaseManager,
+          eventsDatabaseManager: eventsDatabaseManager,
+        ),
+        '/events': (context) => EventPage(eventsDatabaseManager: eventsDatabaseManager),
+        '/profile': (context) => ProfilePage(userDatabaseManager: userDatabaseManager),
       },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  final String title;
-  const MyHomePage({super.key, required this.title});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: const Center(
-        child: CircularProgressIndicator(),
-      ),
     );
   }
 }
