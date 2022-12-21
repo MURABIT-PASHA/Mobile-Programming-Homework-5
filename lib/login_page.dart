@@ -11,8 +11,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-
   final _turkishIdController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -22,67 +20,65 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _turkishIdController,
-                decoration: const InputDecoration(
-                  labelText: 'Turkish ID Number',
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a Turkish ID number';
-                  }
-                  return null;
-                },
+      body: Container(
+        margin: const EdgeInsets.all(15),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _turkishIdController,
+              decoration: const InputDecoration(
+                labelText: 'Turkish ID Number',
               ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                ),
-                obscureText: true,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a Turkish ID number';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _passwordController,
+              decoration: const InputDecoration(
+                labelText: 'Password',
               ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    final user = await widget.userDatabaseManager.getUser(
-                      turkishId: _turkishIdController.text,
-                      password: _passwordController.text,
+              obscureText: true,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a password';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () async {
+                  final user = await widget.userDatabaseManager.getUser(
+                    turkishId: _turkishIdController.text,
+                    password: _passwordController.text,
+                  );
+                  if (user == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content:
+                            Text('Invalid Turkish ID number or password'),
+                      ),
                     );
-                    if (user == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content:
-                              Text('Invalid Turkish ID number or password'),
-                        ),
-                      );
-                    } else {
-                      Navigator.pushNamed(context, '/home');
-                    }
+                  } else {
+                    Navigator.pushNamed(context, '/home');
                   }
-                },
-                child: const Text('Login'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/registration');
-                },
-                child: const Text('Sign up'),
-              ),
-            ],
-          ),
+
+              },
+              child: const Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/registration');
+              },
+              child: const Text('Sign up'),
+            ),
+          ],
         ),
       ),
     );

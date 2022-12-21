@@ -78,6 +78,7 @@ class UserDatabaseManager {
     required String turkishId,
     required String password,
   }) async {
+    printAllRows();
     final db = await _database;
     final results = await db.query(
       'users',
@@ -88,5 +89,11 @@ class UserDatabaseManager {
       return null;
     }
     return User.fromMap(results.first);
+  }
+  Future<void> printAllRows() async {
+    List<Map<String, dynamic>> rows = await _database.rawQuery('SELECT * FROM users');
+    for (Map<String, dynamic> row in rows) {
+      print(row);
+    }
   }
 }

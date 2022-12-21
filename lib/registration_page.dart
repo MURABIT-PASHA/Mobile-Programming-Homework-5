@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:homework_5/login_page.dart';
 import 'package:homework_5/user.dart';
 import 'package:homework_5/user_database_manager.dart';
-import 'package:sqflite/sqflite.dart';
 
 class RegistrationPage extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -17,7 +17,6 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _turkishId = "";
@@ -230,6 +229,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             ElevatedButton(
               onPressed: () {
+                if(control()) {
                   User user = User(
                     turkishId: _turkishId,
                     name: _name,
@@ -240,12 +240,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     interests: _interests,
                     hasDriverLicense: _hasDriverLicense,
                   );
-                  print(user.toString());
                   if (widget.user.isEmpty) {
                     _addUser(user);
                   } else {
                     _updateUser(user);
                   }
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please fill all blanks")));
+                }
               },
               child: Text(widget.user.isEmpty ? 'Sign Up' : 'Save'),
             ),
@@ -254,17 +256,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
     );
   }
+  bool control(){
+    if (_name == "" || _turkishId == "" || _surname == "" || _password == "") {
+      return false;
+    }
+      else{
+        return true;
+    }
+  }
 
   void _addUser(User user) async {
     UserDatabaseManager userDatabaseManager = UserDatabaseManager();
     await userDatabaseManager.addUser(user);
     _showSnackBar('User added successfully');
+    Navigator.push((context), MaterialPageRoute(builder: (builder)=> LoginPage(userDatabaseManager: userDatabaseManager)));
   }
 
   void _updateUser(User user) async {
     UserDatabaseManager userDatabaseManager = UserDatabaseManager();
     await userDatabaseManager.updateUser(user);
     _showSnackBar('User updated successfully');
+    Navigator.push((context), MaterialPageRoute(builder: (builder)=> LoginPage(userDatabaseManager: userDatabaseManager)));
   }
 
   void _showSnackBar(String message) {
