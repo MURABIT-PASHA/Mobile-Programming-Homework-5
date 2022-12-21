@@ -10,7 +10,7 @@ import 'package:homework_5/profile_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final userDatabaseManager = UserDatabaseManager();
-  await userDatabaseManager.database;
+  await userDatabaseManager.init();
   final eventsDatabaseManager = EventsDatabaseManager();
   await eventsDatabaseManager.database;
   runApp(MyApp(

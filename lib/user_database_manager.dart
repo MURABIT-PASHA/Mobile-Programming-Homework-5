@@ -4,54 +4,50 @@ import 'package:sqflite/sqflite.dart';
 
 class UserDatabaseManager {
   static final UserDatabaseManager _instance = UserDatabaseManager._internal();
-
-  factory UserDatabaseManager() {
-    return _instance;
-  }
-
+  factory UserDatabaseManager() => _instance;
   UserDatabaseManager._internal();
 
-  static late Database _database;
+  static var _database;
 
-  Future<Database> get database async {
+  Future<void> init() async {
     if (_database != null) {
-      return _database;
+      return;
     }
 
-    _database = await _initDatabase();
-    return _database;
-  }
-
-  _initDatabase() async {
-    String databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, 'users.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
-  }
-
-  void _onCreate(Database db, int version) async {
-    await db.execute(
-      '''
-      CREATE TABLE users (
-        turkishId TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
-        surname TEXT NOT NULL,
-        password TEXT NOT NULL,
-        dob DATE NOT NULL,
-        maritalStatus TEXT NOT NULL,
-        interests TEXT NOT NULL,
-        hasDriverLicense INTEGER NOT NULL
-      )
-      ''',
-    );
+    try {
+      String path = join(await getDatabasesPath(), 'users.db');
+      _database = await openDatabase(
+        path,
+        version: 1,
+        onCreate: (Database db, int version) async {
+          await db.execute(
+            '''
+              CREATE TABLE users (
+                turkishId TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                surname TEXT NOT NULL,
+                password TEXT NOT NULL,
+                dateOfBirth TEXT NOT NULL,
+                maritalStatus TEXT NOT NULL,
+                interests TEXT NOT NULL,
+                hasDriverLicense INTEGER NOT NULL
+              )
+            ''',
+          );
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<List<Map<String, dynamic>>> getUsers() async {
-    final db = await database;
+    final db = _database;
     return await db.query('users');
   }
 
   Future<void> addUser(User user) async {
-    final db = await database;
+    final db = await _database;
     await db.insert(
       'users',
       user.toMap(),
@@ -60,20 +56,20 @@ class UserDatabaseManager {
   }
 
   Future<void> updateUser(User user) async {
-    final db = await database;
+    final db = await _database;
     await db.update(
       'users',
       user.toMap(),
-      where: 'id = ?',
-      whereArgs: [user.id],
+      where: 'turkishId = ?',
+      whereArgs: [user.turkishId],
     );
   }
 
   Future<int> deleteUser(String turkishId) async {
-    final db = await database;
+    final db = await _database;
     return await db.delete(
       'users',
-      where: 'turkish_id = ?',
+      where: 'turkishId = ?',
       whereArgs: [turkishId],
     );
   }
@@ -82,10 +78,10 @@ class UserDatabaseManager {
     required String turkishId,
     required String password,
   }) async {
-    final db = await database;
+    final db = await _database;
     final results = await db.query(
       'users',
-      where: 'turkish_id = ? AND password = ?',
+      where: 'turkishId = ? AND password = ?',
       whereArgs: [turkishId, password],
     );
     if (results.isEmpty) {
@@ -93,8 +89,4 @@ class UserDatabaseManager {
     }
     return User.fromMap(results.first);
   }
-
-
-
-
 }

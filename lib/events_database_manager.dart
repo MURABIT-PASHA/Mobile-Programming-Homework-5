@@ -4,16 +4,15 @@ import 'package:sqflite/sqflite.dart';
 class EventsDatabaseManager {
   static final EventsDatabaseManager _instance = EventsDatabaseManager._internal();
 
-  factory EventsDatabaseManager() {
-    return _instance;
-  }
+  factory EventsDatabaseManager()=> _instance;
+
 
   EventsDatabaseManager._internal();
 
-  static late Database _database;
+  static var _database;
 
   Future<Database> get database async {
-    if (_database.isOpen) {
+    if (_database != null) {
       return _database;
     }
 
@@ -41,17 +40,17 @@ class EventsDatabaseManager {
   }
 
   Future<List<Map<String, dynamic>>> getEvents() async {
-    final db = await database;
+    final db = await _database;
     return await db.query('events');
   }
 
   Future<int> addEvent(Map<String, dynamic> event) async {
-    final db = await database;
+    final db = await _database;
     return await db.insert('events', event);
   }
 
   Future<int> updateEvent(Map<String, dynamic> event) async {
-    final db = await database;
+    final db = await _database;
     return await db.update(
       'events',
       event,
@@ -61,7 +60,7 @@ class EventsDatabaseManager {
   }
 
   Future<int> deleteEvent(int id) async {
-    final db = await database;
+    final db = await _database;
     return await db.delete(
       'events',
       where: 'id = ?',
