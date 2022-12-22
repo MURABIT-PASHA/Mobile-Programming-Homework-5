@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:homework_5/event.dart';
+import 'package:homework_5/models/event.dart';
 class EventDatabaseManager {
   static const String tableName = 'events';
   static const String columnEventDate = 'eventDate';

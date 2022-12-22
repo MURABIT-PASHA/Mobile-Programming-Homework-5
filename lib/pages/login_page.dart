@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:homework_5/home_page.dart';
-import 'package:homework_5/user_database_manager.dart';
+import 'package:homework_5/pages/home_page.dart';
+import 'package:homework_5/pages/registration_page.dart';
+import 'package:homework_5/dbms/user_database_manager.dart';
 
 class LoginPage extends StatefulWidget {
   final UserDatabaseManager userDatabaseManager;
@@ -81,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/registration');
+                Navigator.push(context, MaterialPageRoute(builder: (builder)=>RegistrationPage(user: {}, userDatabaseManager: widget.userDatabaseManager,)));
               },
               child: const Text('Sign up'),
             ),

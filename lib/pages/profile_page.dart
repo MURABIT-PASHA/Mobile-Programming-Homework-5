@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:homework_5/user.dart';
-import 'package:homework_5/user_database_manager.dart';
-import 'package:homework_5/registration_page.dart';
+import 'package:homework_5/dbms/user_database_manager.dart';
+import 'package:homework_5/pages/registration_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final String userID;

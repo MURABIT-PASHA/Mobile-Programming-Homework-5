@@ -1,4 +1,4 @@
-import 'package:homework_5/user.dart';
+import 'package:homework_5/models/user.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

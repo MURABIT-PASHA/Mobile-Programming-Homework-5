@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:homework_5/user_database_manager.dart';
-import 'package:homework_5/login_page.dart';
+import 'package:homework_5/dbms/user_database_manager.dart';
+import 'package:homework_5/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

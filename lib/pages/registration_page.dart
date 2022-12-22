@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:homework_5/login_page.dart';
-import 'package:homework_5/user.dart';
-import 'package:homework_5/user_database_manager.dart';
+import 'package:homework_5/pages/login_page.dart';
+import 'package:homework_5/models/user.dart';
+import 'package:homework_5/dbms/user_database_manager.dart';
+import 'package:intl/intl.dart';
 
 class RegistrationPage extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -23,7 +24,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String _name = "";
   String _surname = "";
   String _password = "";
-  DateTime _dob = DateTime.now();
+  DateTime _dateOfBirth = DateTime.now();
   String _maritalStatus = "";
   List<String> _interests = [];
   bool _hasDriverLicense = false;
@@ -32,11 +33,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   void initState() {
     super.initState();
     if (widget.user.isNotEmpty) {
+      print(widget.user['dateOfBirth']);
       _turkishId = widget.user['turkishId'];
       _name = widget.user['name'];
       _surname = widget.user['surname'];
       _password = widget.user['password'];
-      _dob = widget.user['dob'];
+      _dateOfBirth =
+          DateFormat("yyyy-MM-dd HH:mm:ss").parse(widget.user['dateOfBirth']);
       _maritalStatus = widget.user['maritalStatus'];
       _interests = widget.user['interests'];
       _hasDriverLicense = widget.user['hasDriverLicense'];
@@ -61,13 +64,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
               height: 50,
               margin: const EdgeInsets.only(top: 10, bottom: 10),
               child: TextField(
-                decoration: const InputDecoration(labelText: 'Turkish ID Number'),
+                decoration:
+                    const InputDecoration(labelText: 'Turkish ID Number'),
                 onChanged: (value) {
                   if (value.isNotEmpty) {
                     _turkishId = value;
-                  }
-                  else{
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Please enter your ID")));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please enter your ID")));
                   }
                 },
               ),
@@ -77,14 +81,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
               height: 50,
               margin: const EdgeInsets.only(top: 10, bottom: 10),
               child: TextField(
-                decoration:
-                    const InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 onChanged: (value) {
                   if (value.isNotEmpty) {
                     _name = value;
-                  }
-                  else{
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Please enter your name")));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Please enter your name")));
                   }
                 },
               ),
@@ -98,9 +101,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 onChanged: (value) {
                   if (value.isNotEmpty) {
                     _surname = value;
-                  }
-                  else{
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Please enter your surname")));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Please enter your surname")));
                   }
                 },
               ),
@@ -114,9 +117,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 onChanged: (value) {
                   if (value.isNotEmpty) {
                     _password = value;
-                  }
-                  else{
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Please enter your password")));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Please enter your password")));
                   }
                 },
                 obscureText: true,
@@ -128,9 +131,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
               margin: const EdgeInsets.only(top: 10, bottom: 10),
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
-                initialDateTime: _dob,
+                initialDateTime: _dateOfBirth,
                 onDateTimeChanged: (date) {
-                  setState(() => _dob = date);
+                  setState(() => _dateOfBirth = date);
                 },
               ),
             ),
@@ -232,13 +235,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(control()) {
+                if (control()) {
                   User user = User(
                     turkishId: _turkishId,
                     name: _name,
                     surname: _surname,
                     password: _password,
-                    dateOfBirth: _dob.toIso8601String(),
+                    dateOfBirth: _dateOfBirth.toIso8601String(),
                     maritalStatus: _maritalStatus,
                     interests: _interests,
                     hasDriverLicense: _hasDriverLicense,
@@ -248,8 +251,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   } else {
                     _updateUser(user);
                   }
-                }else{
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please fill all blanks")));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Please fill all blanks")));
                 }
               },
               child: Text(widget.user.isEmpty ? 'Sign Up' : 'Save'),
@@ -259,12 +263,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
     );
   }
-  bool control(){
-    if (_name == "" || _turkishId == "" || _surname == "" || _password == "" || _maritalStatus == "") {
+
+  bool control() {
+    if (_name == "" ||
+        _turkishId == "" ||
+        _surname == "" ||
+        _password == "" ||
+        _maritalStatus == "") {
       return false;
-    }
-      else{
-        return true;
+    } else {
+      return true;
     }
   }
 
@@ -272,14 +280,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
     UserDatabaseManager userDatabaseManager = UserDatabaseManager();
     await userDatabaseManager.addUser(user);
     _showSnackBar('User added successfully');
-    Navigator.push((context), MaterialPageRoute(builder: (builder)=> LoginPage(userDatabaseManager: userDatabaseManager)));
+    Navigator.push(
+        (context),
+        MaterialPageRoute(
+            builder: (builder) =>
+                LoginPage(userDatabaseManager: userDatabaseManager)));
   }
 
   void _updateUser(User user) async {
     UserDatabaseManager userDatabaseManager = UserDatabaseManager();
     await userDatabaseManager.updateUser(user);
     _showSnackBar('User updated successfully');
-    Navigator.push((context), MaterialPageRoute(builder: (builder)=> LoginPage(userDatabaseManager: userDatabaseManager)));
+    Navigator.push(
+        (context),
+        MaterialPageRoute(
+            builder: (builder) =>
+                LoginPage(userDatabaseManager: userDatabaseManager)));
   }
 
   void _showSnackBar(String message) {

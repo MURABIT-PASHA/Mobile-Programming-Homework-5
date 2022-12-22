@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:homework_5/add_event.dart';
-import 'package:homework_5/events_database_manager.dart';
-import 'package:homework_5/login_page.dart';
-import 'package:homework_5/user_database_manager.dart';
-import 'package:homework_5/profile_page.dart';
-import 'package:homework_5/events_page.dart';
+import 'package:homework_5/dbms/events_database_manager.dart';
+import 'package:homework_5/pages/login_page.dart';
+import 'package:homework_5/dbms/user_database_manager.dart';
+import 'package:homework_5/pages/profile_page.dart';
+import 'package:homework_5/pages/events_page.dart';
 
 class HomePage extends StatefulWidget {
   final UserDatabaseManager userDatabaseManager;
